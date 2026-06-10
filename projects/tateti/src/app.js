@@ -26,6 +26,7 @@ let gameActive = true;
 let mode = 'local';
 let humanMark = 'X';
 let score = loadScore();
+let winningLineState = null;
 
 function loadScore() {
   try {
@@ -68,6 +69,10 @@ function renderBoard() {
 
     if (mark) {
       button.classList.add(mark.toLowerCase());
+    }
+
+    if (winningLineState?.includes(index)) {
+      button.classList.add('winning');
     }
 
     button.addEventListener('click', () => play(index));
@@ -116,7 +121,7 @@ function play(index) {
 
   const winningLine = findWinningLine(currentPlayer);
   if (winningLine) {
-    highlightWinningLine(winningLine);
+    winningLineState = winningLine;
     finishGame(currentPlayer === humanMark ? 'win' : 'loss');
     return;
   }
@@ -127,6 +132,7 @@ function play(index) {
   }
 
   switchTurn();
+  renderBoard();
 
   if (mode === 'cpu' && currentPlayer === cpuMark()) {
     window.setTimeout(computerMove, 260);
@@ -135,14 +141,6 @@ function play(index) {
 
 function cpuMark() {
   return humanMark === 'X' ? 'O' : 'X';
-}
-
-function highlightWinningLine(line) {
-  [...boardEl.children].forEach((cell, index) => {
-    if (line.includes(index)) {
-      cell.classList.add('winning');
-    }
-  });
 }
 
 function computerMove() {
@@ -184,6 +182,7 @@ function restartGame() {
   board = Array(9).fill(null);
   currentPlayer = 'X';
   gameActive = true;
+  winningLineState = null;
   setStatus('Turno de X');
   renderBoard();
 }
@@ -201,6 +200,7 @@ modeEl.addEventListener('change', () => {
   humanMark = mode === 'cpu' ? playerMarkEl.value : 'X';
   currentPlayer = 'X';
   gameActive = true;
+  winningLineState = null;
   setStatus(mode === 'cpu' ? `Jugás con ${humanMark}. Empezá la partida.` : 'Turno de X');
   renderBoard();
 });
@@ -209,6 +209,7 @@ playerMarkEl.addEventListener('change', () => {
   humanMark = playerMarkEl.value;
   currentPlayer = 'X';
   gameActive = true;
+  winningLineState = null;
   setStatus(`Jugás con ${humanMark}. Empezá la partida.`);
   renderBoard();
 });
