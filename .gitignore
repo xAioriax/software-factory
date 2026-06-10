@@ -1,0 +1,14 @@
+node_modules/
+dist/
+build/
+.env
+.env.*
+!.env.example
+.DS_Store
+*.log
+coverage/
+.cache/
+tmp/
+projects/*/node_modules/
+projects/*/dist/
+projects/*/build/

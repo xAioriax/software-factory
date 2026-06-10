@@ -1,0 +1,7 @@
+{
+  "name": "lista-tareas",
+  "description": "App de lista de tareas simple",
+  "type": "static",
+  "created_by": "software-factory",
+  "entrypoint": "index.html"
+}

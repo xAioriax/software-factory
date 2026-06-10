@@ -1,0 +1,7 @@
+{
+  "name": "tateti",
+  "description": "Juego clásico de tatetí 3x3 para dos jugadores locales.",
+  "type": "static",
+  "created_by": "software-factory",
+  "entrypoint": "index.html"
+}

@@ -1,0 +1,7 @@
+{
+  "name": "calculadora-propinas",
+  "description": "Calculadora de propinas para restaurantes.",
+  "type": "static",
+  "created_by": "software-factory",
+  "entrypoint": "index.html"
+}

@@ -1,0 +1,7 @@
+{
+  "name": "demo-hola",
+  "description": "App de prueba generada por la software factory",
+  "type": "static",
+  "created_by": "software-factory",
+  "entrypoint": "index.html"
+}
