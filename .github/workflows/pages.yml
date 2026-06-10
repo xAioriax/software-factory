@@ -1,0 +1,101 @@
+name: Deploy GitHub Pages
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - 'projects/**'
+      - 'scripts/build-static.sh'
+      - '.github/workflows/pages.yml'
+      - 'docs/**'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
+concurrency:
+  group: pages
+  cancel-in-progress: false
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Build static sites
+        run: |
+          set -euo pipefail
+          rm -rf public
+          mkdir -p public/projects
+
+          cat > public/index.html <<'HTML'
+          <!doctype html>
+          <html lang="es">
+          <head>
+            <meta charset="utf-8" />
+            <meta name="viewport" content="width=device-width, initial-scale=1" />
+            <title>Software Factory</title>
+            <style>
+              :root { color-scheme: dark; font-family: system-ui, sans-serif; }
+              body { margin: 0; background: #0f172a; color: #e5e7eb; }
+              main { max-width: 960px; margin: 0 auto; padding: 48px 20px; }
+              a { color: #93c5fd; }
+              .card { border: 1px solid #334155; border-radius: 16px; padding: 18px; margin: 14px 0; background: #111827; }
+              code { color: #bfdbfe; }
+            </style>
+          </head>
+          <body>
+            <main>
+              <h1>Software Factory</h1>
+              <p>Apps web generadas desde pedidos por chat o Telegram.</p>
+              <h2>Proyectos publicados</h2>
+              <div id="projects"></div>
+              <script>
+                const projects = [
+                  ['tateti', 'Tatetí'],
+                  ['lista-tareas', 'Lista de tareas'],
+                  ['calculadora-propinas', 'Calculadora de propinas'],
+                  ['demo-hola', 'Demo Hola']
+                ];
+                const container = document.querySelector('#projects');
+                for (const [slug, title] of projects) {
+                  const card = document.createElement('a');
+                  card.className = 'card';
+                  card.href = './projects/' + slug + '/';
+                  card.innerHTML = '<strong>' + title + '</strong><br><code>projects/' + slug + '/dist/</code>';
+                  container.appendChild(card);
+                }
+              </script>
+            </main>
+          </body>
+          </html>
+          HTML
+
+          for project_dir in projects/*; do
+            [ -d "$project_dir" ] || continue
+            slug="${project_dir##*/}"
+            [ -f "$project_dir/index.html" ] || continue
+            ./scripts/build-static.sh "$slug" >/dev/null
+            mkdir -p "public/projects/$slug"
+            cp -a "$project_dir/dist/." "public/projects/$slug/"
+          done
+
+      - name: Upload Pages artifact
+        uses: actions/upload-pages-artifact@v3
+        with:
+          path: public
+
+  deploy:
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    runs-on: ubuntu-latest
+    needs: build
+    steps:
+      - name: Deploy to GitHub Pages
+        id: deployment
+        uses: actions/deploy-pages@v4

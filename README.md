@@ -2,6 +2,10 @@
 
 Repositorio base para crear aplicaciones web a pedido desde Telegram o chat, publicarlas en GitHub y dejarlas disponibles en una URL pública.
 
+Repo remoto: https://github.com/xAioriax/software-factory
+
+Publicación inicial: GitHub Pages, con una página índice y subcarpetas por proyecto.
+
 ## Estado actual
 
 Este repositorio ya tiene una base funcional local:
@@ -10,7 +14,9 @@ Este repositorio ya tiene una base funcional local:
 - validación mínima;
 - build para publicar;
 - prompts de agentes por rol;
-- primer proyecto real migrado: `tateti`.
+- primer proyecto real migrado: `tateti`;
+- GitHub CLI autenticado;
+- workflow de GitHub Actions para publicar en GitHub Pages.
 
 ## Flujo esperado
 
@@ -18,8 +24,8 @@ Este repositorio ya tiene una base funcional local:
 2. Hermes crea una carpeta bajo `projects/`.
 3. Se genera el código con una plantilla.
 4. Se valida el build.
-5. Se crea o actualiza un repo en GitHub.
-6. Se despliega la app.
+5. Se crea commit y se sube a GitHub.
+6. GitHub Actions publica la app en GitHub Pages.
 7. Hermes responde con la URL.
 
 ## Carpetas
@@ -51,17 +57,15 @@ Build estático:
 
 ## Despliegue
 
-Para publicar en GitHub Pages se necesita:
+El workflow `.github/workflows/pages.yml` publica automáticamente en GitHub Pages cuando se hace push a `main`.
 
-- token `GITHUB_TOKEN`;
-- repo remoto configurado;
-- rama `gh-pages` o equivalente.
+Cada app queda disponible en:
 
-Ejemplo:
+`https://xAioriax.github.io/software-factory/projects/<nombre-proyecto>/`
 
-```bash
-GITHUB_TOKEN=... ./scripts/deploy-github-pages.sh nombre-app gh-pages
-```
+La página índice queda en:
+
+`https://xAioriax.github.io/software-factory/`
 
 ## Próximos pasos
 
