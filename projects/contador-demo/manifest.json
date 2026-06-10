@@ -1,0 +1,7 @@
+{
+  "name": "contador-demo",
+  "description": "Contador simple con botones de sumar, restar y reiniciar.",
+  "type": "static",
+  "created_by": "software-factory",
+  "entrypoint": "index.html"
+}
