@@ -1,0 +1,40 @@
+<!doctype html>
+<html lang="es">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Software Factory</title>
+  <style>
+    :root { color-scheme: dark; font-family: system-ui, sans-serif; }
+    body { margin: 0; background: #0f172a; color: #e5e7eb; }
+    main { max-width: 960px; margin: 0 auto; padding: 48px 20px; }
+    a { color: #93c5fd; }
+    .card { border: 1px solid #334155; border-radius: 16px; padding: 18px; margin: 14px 0; background: #111827; }
+    code { color: #bfdbfe; }
+  </style>
+</head>
+<body>
+  <main>
+    <h1>Software Factory</h1>
+    <p>Apps web generadas desde pedidos por chat o Telegram.</p>
+    <h2>Proyectos publicados</h2>
+    <div id="projects"></div>
+    <script>
+      const projects = [
+        ['tateti', 'Tatetí'],
+        ['lista-tareas', 'Lista de tareas'],
+        ['calculadora-propinas', 'Calculadora de propinas'],
+        ['demo-hola', 'Demo Hola']
+      ];
+      const container = document.querySelector('#projects');
+      for (const [slug, title] of projects) {
+        const card = document.createElement('a');
+        card.className = 'card';
+        card.href = './projects/' + slug + '/';
+        card.innerHTML = '<strong>' + title + '</strong><br><code>projects/' + slug + '/dist/</code>';
+        container.appendChild(card);
+      }
+    </script>
+  </main>
+</body>
+</html>
